@@ -14,11 +14,24 @@ import javafx.scene.layout.AnchorPane;
 import java.io.*;
 
 public class Controller extends Application {
+
     @FXML
-    private ImageView image;
+    private ToggleGroup encryptMethod;
 
     @FXML
     private RadioButton playfairCheck;
+
+    @FXML
+    private RadioButton vigenerCheck;
+
+    @FXML
+    private RadioButton railwayCheck;
+
+    @FXML
+    private RadioButton spacesRadioButt;
+
+    @FXML
+    private ImageView image;
 
     @FXML
     private TextField keyArea;
@@ -27,25 +40,16 @@ public class Controller extends Application {
     private Button encryptButt;
 
     @FXML
+    private Button decryptButt;
+
+    @FXML
     private TextArea cipherText;
-
-    @FXML
-    private ToggleGroup encryptMethod;
-
-    @FXML
-    private RadioButton vigenerCheck;
 
     @FXML
     private TextArea plainText;
 
     @FXML
-    private RadioButton railwayCheck;
-
-    @FXML
     private Menu fileButt;
-
-    @FXML
-    private Button decryptButt;
 
 
     @FXML
@@ -60,12 +64,40 @@ public class Controller extends Application {
 
     @FXML
     void encrypt() {
-        Encryptor encryptor = switch (getEncryptionMethod()) {
-            case RailwayFence -> new RailwayEncryptor();
-            case Vigener -> new VigenerEncryptor("rus");
-            case Playfair -> new PlayfairEncryptor();
-        };
-        cipherText.setText(encryptor.encrypt(plainText.getText(), keyArea.getText()));
+
+        Encryptor encryptor = null;
+        Filter filter = null;
+        KeyChecker keyChecker = null;
+        switch (getEncryptionMethod()) {
+            case RailwayFence -> {
+                encryptor = new RailwayEncryptor();
+                filter = new Filter("eng");
+                keyChecker = new KeyChecker("num");
+            }
+            case Vigener -> {
+                encryptor = new VigenerEncryptor("rus");
+                filter = new Filter("rus");
+                keyChecker = new KeyChecker("rus");
+
+            }
+            case Playfair -> {
+                encryptor = new PlayfairEncryptor();
+                filter = new Filter("eng");
+                keyChecker = new KeyChecker("eng");
+            }
+        }
+        if (keyChecker.checkKey(keyArea.getText())) {
+            cipherText.setText(encryptor.encrypt
+                    (filter.filterMsg(plainText.getText(), spacesRadioButt.isSelected()),
+                            keyArea.getText()));
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Incorrect key");
+            alert.setHeaderText(null);
+            alert.setContentText("Please check your key and try again.");
+            alert.showAndWait();
+        }
+
     }
 
     @FXML

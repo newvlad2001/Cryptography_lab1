@@ -2,7 +2,7 @@ public class Filter {
 
     private String lang;
 
-    Filter(String lang, boolean isSpaceIncluded) {
+    Filter(String lang) {
         setLang(lang);
     }
 
@@ -13,10 +13,10 @@ public class Filter {
     public void setLang(String lang) {
         if (lang.equals("rus") || lang.equals("eng")) {
             this.lang = lang;
+        } else {
+            throw new IllegalArgumentException("only \"rus\" and \"eng\" supported.");
         }
     }
-
-
 
     public String filterMsg(String msg, boolean isSpaceIncluded) {
         StringBuilder result = new StringBuilder();

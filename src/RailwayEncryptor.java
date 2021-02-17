@@ -1,13 +1,14 @@
 public class RailwayEncryptor implements Encryptor {
     // any language
-    public String encrypt(String toEncrypt, String key) {
+    public String encrypt(String toEncrypt, String keySrc) {
         StringBuilder cipherText = new StringBuilder();
-        for (int lvl = 0; lvl < Integer.parseInt(key); lvl++) {
+        int key = Integer.parseInt(keySrc);
+        for (int lvl = 0; lvl < key; lvl++) {
             int j = lvl;
             boolean flag = false;
             while (j < toEncrypt.length()) {
                 cipherText.append(toEncrypt.charAt(j));
-                j += getOffset(lvl, flag, Integer.parseInt(key));
+                j += getOffset(lvl, flag, key);
                 flag = !flag;
             }
         }
@@ -15,7 +16,7 @@ public class RailwayEncryptor implements Encryptor {
     }
 
     public String decrypt(String toDecrypt, String keySrc) {
-        int key = getKey(keySrc);
+        int key = Integer.parseInt(keySrc);
         StringBuilder plainText = new StringBuilder();
         StringBuilder[] arr = new StringBuilder[key];
         int index = 0;
@@ -51,10 +52,6 @@ public class RailwayEncryptor implements Encryptor {
             }
         }
         return plainText.toString();
-    }
-
-    public int getKey(String src) {
-        return Integer.parseInt(src);
     }
 
     private int getOffset(int lvl, boolean flag, int key) {

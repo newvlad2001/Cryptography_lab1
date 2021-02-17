@@ -45,8 +45,7 @@ public class PlayfairEncryptor implements Encryptor {
             if (resString.charAt(i) == 'J') {
                 resString.insert(i + 1, 'I');
                 resString.deleteCharAt(i);
-            }
-            else if (resString.charAt(i) == 'j') {
+            } else if (resString.charAt(i) == 'j') {
                 resString.insert(i + 1, 'i');
                 resString.deleteCharAt(i);
             }
@@ -63,7 +62,9 @@ public class PlayfairEncryptor implements Encryptor {
 
     @Override
     public String decrypt(String msg, String key) {
-        StringBuilder toDecrypt = new StringBuilder(msg);
+        StringBuilder toDecrypt;
+
+        toDecrypt = new StringBuilder(msg);
         for (int i = 0; i < toDecrypt.length() - 1; i += 2) {
             int[] fCharPos = getPosition(toDecrypt.charAt(i));
             int[] sCharPos = getPosition(toDecrypt.charAt(i + 1));
