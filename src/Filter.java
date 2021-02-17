@@ -33,7 +33,7 @@ public class Filter {
         if (lang.equals("eng"))
             result = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
         else if (lang.equals("rus"))
-            result = ((c >= 'А' && c <= 'Я') || (c >= 'а' && c <= 'я'));
+            result = (((c >= 'А' && c <= 'Я') || c == 'Ё') || ((c >= 'а' && c <= 'я') || c == 'ё'));
         if (isSpaceIncluded && !result)
             result = (c == ' ');
         return result;

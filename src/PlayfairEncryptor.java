@@ -13,6 +13,8 @@ public class PlayfairEncryptor implements Encryptor {
         for (int i = 0; i < toEncrypt.length() - 1; i += 2) {
             int[] fCharPos = getPosition(toEncrypt.charAt(i));
             int[] sCharPos = getPosition(toEncrypt.charAt(i + 1));
+            boolean isLowerCaseF = Character.isLowerCase(toEncrypt.charAt(i));
+            boolean isLowerCaseS = Character.isLowerCase(toEncrypt.charAt(i + 1));
             char toReplaceF = 0;
             char toReplaceS = 0;
             if (fCharPos[0] == sCharPos[0]) {
@@ -25,15 +27,29 @@ public class PlayfairEncryptor implements Encryptor {
                 toReplaceF = cipherTable[fCharPos[0]][sCharPos[1]];
                 toReplaceS = cipherTable[sCharPos[0]][fCharPos[1]];
             }
+            if (isLowerCaseF) {
+                toReplaceF = Character.toLowerCase(toReplaceF);
+            }
+            if (isLowerCaseS) {
+                toReplaceS = Character.toLowerCase(toReplaceS);
+            }
             toEncrypt.replace(i, i + 2, String.valueOf(toReplaceF) + toReplaceS);
         }
         return toEncrypt.toString();
     }
 
     private StringBuilder prepareString(String msg) {
-        StringBuilder resString = new StringBuilder(msg.toUpperCase());
+        StringBuilder resString = new StringBuilder(msg);
         int i = 0;
         while (i < resString.length() - 1) {
+            if (resString.charAt(i) == 'J') {
+                resString.insert(i + 1, 'I');
+                resString.deleteCharAt(i);
+            }
+            else if (resString.charAt(i) == 'j') {
+                resString.insert(i + 1, 'i');
+                resString.deleteCharAt(i);
+            }
             if (resString.charAt(i) == resString.charAt(i + 1)) {
                 resString.insert(i + 1, 'X');
                 i++;
@@ -47,11 +63,37 @@ public class PlayfairEncryptor implements Encryptor {
 
     @Override
     public String decrypt(String msg, String key) {
-        return encrypt(msg, key);
+        StringBuilder toDecrypt = new StringBuilder(msg);
+        for (int i = 0; i < toDecrypt.length() - 1; i += 2) {
+            int[] fCharPos = getPosition(toDecrypt.charAt(i));
+            int[] sCharPos = getPosition(toDecrypt.charAt(i + 1));
+            boolean isLowerCaseF = Character.isLowerCase(toDecrypt.charAt(i));
+            boolean isLowerCaseS = Character.isLowerCase(toDecrypt.charAt(i + 1));
+            char toReplaceF = 0;
+            char toReplaceS = 0;
+            if (fCharPos[0] == sCharPos[0]) {
+                toReplaceF = cipherTable[fCharPos[0]][(cipherTable.length + fCharPos[1] - 1) % cipherTable.length];
+                toReplaceS = cipherTable[sCharPos[0]][(cipherTable.length + sCharPos[1] - 1) % cipherTable.length];
+            } else if (fCharPos[1] == sCharPos[1]) {
+                toReplaceF = cipherTable[(cipherTable.length + fCharPos[0] - 1) % cipherTable.length][fCharPos[1]];
+                toReplaceS = cipherTable[(cipherTable.length + sCharPos[0] - 1) % cipherTable.length][sCharPos[1]];
+            } else {
+                toReplaceF = cipherTable[fCharPos[0]][sCharPos[1]];
+                toReplaceS = cipherTable[sCharPos[0]][fCharPos[1]];
+            }
+            if (isLowerCaseF) {
+                toReplaceF = Character.toLowerCase(toReplaceF);
+            }
+            if (isLowerCaseS) {
+                toReplaceS = Character.toLowerCase(toReplaceS);
+            }
+            toDecrypt.replace(i, i + 2, String.valueOf(toReplaceF) + toReplaceS);
+        }
+        return toDecrypt.toString();
     }
 
     private int[] getPosition(char c) {
-        if (c == 'J') return getPosition('I');
+        c = Character.toUpperCase(c);
         for (int i = 0; i < cipherTable.length; i++) {
             for (int j = 0; j < cipherTable[i].length; j++) {
                 if (cipherTable[i][j] == c)
