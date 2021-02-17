@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="265.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+   <children>
+      <TextArea fx:id="plainText" layoutX="20.0" layoutY="56.0" prefHeight="95.0" prefWidth="273.0" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="307.0" AnchorPane.topAnchor="56.0" />
+      <TextArea fx:id="cipherText" layoutX="307.0" layoutY="56.0" prefHeight="95.0" prefWidth="273.0" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="307.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="56.0" />
+      <VBox layoutX="20.0" layoutY="165.0" prefHeight="105.0" prefWidth="125.0" AnchorPane.bottomAnchor="-5.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="455.0" AnchorPane.topAnchor="165.0">
+         <children>
+            <RadioButton fx:id="railwayCheck" mnemonicParsing="false" text="RailwayFence ">
+               <padding>
+                  <Insets bottom="5.0" top="5.0" />
+               </padding>
+               <toggleGroup>
+                  <ToggleGroup fx:id="encryptMethod" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="vigenerCheck" mnemonicParsing="false" text="Vigener" toggleGroup="$encryptMethod">
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </RadioButton>
+            <RadioButton fx:id="playfairCheck" mnemonicParsing="false" text="Playfair" toggleGroup="$encryptMethod">
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </RadioButton>
+         </children>
+      </VBox>
+      <Text layoutX="20.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Plain Text:" AnchorPane.bottomAnchor="344.8671875" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="511.48974609375" AnchorPane.topAnchor="40.0" />
+      <Text layoutX="307.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cipher Text:" AnchorPane.bottomAnchor="210.0" AnchorPane.leftAnchor="307.0" AnchorPane.rightAnchor="213.2353515625" AnchorPane.topAnchor="40.0" />
+      <MenuBar AnchorPane.bottomAnchor="236.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="541.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu fx:id="fileButt" mnemonicParsing="false" onAction="#chooseFile" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Open" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Separator layoutX="89.0" layoutY="28.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <VBox layoutX="500.0" layoutY="173.0" prefHeight="77.0" prefWidth="80.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="173.0">
+         <children>
+            <Button fx:id="encryptButt" mnemonicParsing="false" onAction="#encrypt" prefHeight="25.0" prefWidth="80.0" text="Encrypt">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="decryptButt" mnemonicParsing="false" onAction="#decrypt" prefHeight="25.0" prefWidth="80.0" text="Decrypt" />
+         </children>
+      </VBox>
+      <TextField fx:id="keyArea" alignment="TOP_LEFT" layoutX="215.0" layoutY="176.0" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="215.0" AnchorPane.rightAnchor="214.0" AnchorPane.topAnchor="176.0" />
+      <Text layoutX="285.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Key:" />
+   </children>
+</AnchorPane>

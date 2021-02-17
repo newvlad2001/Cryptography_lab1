@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="265.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+   <children>
+      <TextArea fx:id="plainText" layoutX="13.0" layoutY="56.0" prefHeight="95.0" prefWidth="273.0" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="314.0" AnchorPane.topAnchor="56.0">
+         <font>
+            <Font size="16.0" />
+         </font></TextArea>
+      <TextArea fx:id="cipherText" layoutX="313.0" layoutY="56.0" prefHeight="95.0" prefWidth="273.0" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="313.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="56.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextArea>
+      <VBox layoutX="13.0" layoutY="165.0" prefHeight="105.0" prefWidth="125.0" AnchorPane.bottomAnchor="-5.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="462.0" AnchorPane.topAnchor="165.0">
+         <children>
+            <RadioButton fx:id="railwayCheck" mnemonicParsing="false" selected="true" text="RailwayFence ">
+               <padding>
+                  <Insets bottom="5.0" top="5.0" />
+               </padding>
+               <toggleGroup>
+                  <ToggleGroup fx:id="encryptMethod" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="vigenerCheck" mnemonicParsing="false" text="Vigener" toggleGroup="$encryptMethod">
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </RadioButton>
+            <RadioButton fx:id="playfairCheck" mnemonicParsing="false" text="Playfair" toggleGroup="$encryptMethod">
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </RadioButton>
+         </children>
+      </VBox>
+      <Text layoutX="14.0" layoutY="52.06689453125" strokeType="OUTSIDE" strokeWidth="0.0" text="Plain Text:" AnchorPane.bottomAnchor="209.8671875" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="517.48974609375" AnchorPane.topAnchor="40.0" />
+      <Text layoutX="314.0" layoutY="52.06689453125" strokeType="OUTSIDE" strokeWidth="0.0" text="Cipher Text:" AnchorPane.bottomAnchor="209.8671875" AnchorPane.leftAnchor="314.0" AnchorPane.rightAnchor="206.2353515625" AnchorPane.topAnchor="40.0" />
+      <MenuBar AnchorPane.bottomAnchor="236.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="541.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu fx:id="fileButt" mnemonicParsing="false" onAction="#chooseFile" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Open" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Separator layoutX="89.0" layoutY="28.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <VBox layoutX="506.0" layoutY="173.0" prefHeight="77.0" prefWidth="80.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="506.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="173.0">
+         <children>
+            <Button fx:id="encryptButt" mnemonicParsing="false" onAction="#encrypt" prefHeight="25.0" prefWidth="80.0" text="Encrypt">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="decryptButt" mnemonicParsing="false" onAction="#decrypt" prefHeight="25.0" prefWidth="80.0" text="Decrypt" />
+         </children>
+      </VBox>
+      <TextField fx:id="keyArea" alignment="TOP_LEFT" layoutX="215.0" layoutY="176.0" prefHeight="29.0" prefWidth="171.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="215.0" AnchorPane.rightAnchor="214.0" AnchorPane.topAnchor="176.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <Text layoutX="285.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Key:" />
+      <ImageView fx:id="image" fitHeight="25.0" fitWidth="22.0" layoutX="288.0" layoutY="93.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="288.0" AnchorPane.rightAnchor="290.0" AnchorPane.topAnchor="93.0">
+         <viewport>
+            <Rectangle2D />
+         </viewport>
+         <image>
+            <Image url="@../baseline_sync_alt_black_18dp.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
