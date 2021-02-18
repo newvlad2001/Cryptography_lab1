@@ -94,7 +94,7 @@ public class Controller extends Application {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Incorrect key");
             alert.setHeaderText(null);
-            alert.setContentText("Please check your key and try again.");
+            alert.setContentText("The selected encryption method supports only " + keyChecker.getMode() + " keys.");
             alert.showAndWait();
         }
 
