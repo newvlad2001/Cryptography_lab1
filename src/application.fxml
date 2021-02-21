@@ -9,11 +9,11 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="265.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <children>
-      <TextArea fx:id="plainText" layoutX="13.0" layoutY="56.0" prefHeight="95.0" prefWidth="273.0" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="314.0" AnchorPane.topAnchor="56.0">
+      <TextArea fx:id="plainText" layoutX="13.0" layoutY="56.0" prefHeight="95.0" prefWidth="273.0" wrapText="true" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="314.0" AnchorPane.topAnchor="56.0">
          <font>
             <Font size="16.0" />
          </font></TextArea>
-      <TextArea fx:id="cipherText" layoutX="313.0" layoutY="56.0" prefHeight="95.0" prefWidth="273.0" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="313.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="56.0">
+      <TextArea fx:id="cipherText" layoutX="313.0" layoutY="56.0" prefHeight="95.0" prefWidth="273.0" wrapText="true" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="313.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="56.0">
          <font>
             <Font size="16.0" />
          </font>
@@ -76,6 +76,5 @@
             <Image url="file:/home/vladislav/IdeaProjects/Cryptography_lab1/baseline_sync_alt_black_18dp.png" />
          </image>
       </ImageView>
-      <RadioButton fx:id="spacesRadioButt" layoutX="240.0" layoutY="218.0" mnemonicParsing="false" text="Include spaces" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="240.0" AnchorPane.rightAnchor="239.0" AnchorPane.topAnchor="218.0" />
    </children>
 </AnchorPane>

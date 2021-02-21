@@ -28,9 +28,6 @@ public class Controller extends Application {
     private RadioButton railwayCheck;
 
     @FXML
-    private RadioButton spacesRadioButt;
-
-    @FXML
     private ImageView image;
 
     @FXML
@@ -52,22 +49,38 @@ public class Controller extends Application {
     private Menu fileButt;
 
 
-    @FXML
-    void decrypt() {
-        Encryptor encryptor = switch (getEncryptionMethod()) {
-            case RailwayFence -> new RailwayEncryptor();
-            case Vigener -> new VigenerEncryptor("rus");
-            case Playfair -> new PlayfairEncryptor();
-        };
-        plainText.setText(encryptor.decrypt(cipherText.getText(), keyArea.getText()));
-    }
+    private Encryptor encryptor;
+    private Filter filter;
+    private KeyChecker keyChecker;
+
 
     @FXML
     void encrypt() {
+        if (setup()) {
+            cipherText.setText(encryptor.encrypt
+                    (filter.filterMsg(plainText.getText(), false),
+                            keyArea.getText()));
+            saveToFile(cipherText.getText(), getEncryptionMethod().toString() + "|"
+                    + keyArea.getText() + "|" + "Cipher.txt");
+        }
+    }
 
-        Encryptor encryptor = null;
-        Filter filter = null;
-        KeyChecker keyChecker = null;
+    @FXML
+    void decrypt() {
+        if (setup()) {
+            plainText.setText(encryptor.decrypt
+                    (filter.filterMsg(cipherText.getText(), false),
+                            keyArea.getText()));
+            saveToFile(plainText.getText(), getEncryptionMethod().toString() + "|"
+                    + keyArea.getText() + "|" + "Plain.txt");
+        }
+    }
+
+    private boolean setup() {
+        encryptor = null;
+        filter = null;
+        keyChecker = null;
+        boolean result = true;
         switch (getEncryptionMethod()) {
             case RailwayFence -> {
                 encryptor = new RailwayEncryptor();
@@ -86,27 +99,39 @@ public class Controller extends Application {
                 keyChecker = new KeyChecker("eng");
             }
         }
-        if (keyChecker.checkKey(keyArea.getText())) {
-            cipherText.setText(encryptor.encrypt
-                    (filter.filterMsg(plainText.getText(), spacesRadioButt.isSelected()),
-                            keyArea.getText()));
-        } else {
+        if (!keyChecker.checkKey(keyArea.getText())) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Incorrect key");
             alert.setHeaderText(null);
             alert.setContentText("The selected encryption method supports only " + keyChecker.getMode() + " keys.");
             alert.showAndWait();
+            result = false;
         }
-
+        return result;
     }
+
+    private void saveToFile(String text, String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));){
+            writer.write(text);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     void chooseFile() {
         try {
+            clear();
             getFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void clear() {
+        cipherText.clear();
+        plainText.clear();
     }
 
     @Override
@@ -125,7 +150,11 @@ public class Controller extends Application {
         File file = fileChooser.showOpenDialog(new Stage());
         if (file != null) {
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            plainText.setText(reader.readLine());
+            StringBuilder text = new StringBuilder();
+            String str;
+            while ((str = reader.readLine()) != null)
+                text.append(str);
+            plainText.setText(text.toString());
         }
     }
 
