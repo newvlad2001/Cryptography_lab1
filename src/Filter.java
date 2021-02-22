@@ -11,10 +11,10 @@ public class Filter {
     }
 
     public void setLang(String lang) {
-        if (lang.equals("rus") || lang.equals("eng")) {
+        if (lang.equals("rus") || lang.equals("eng") || lang.equals("num")) {
             this.lang = lang;
         } else {
-            throw new IllegalArgumentException("only \"rus\" and \"eng\" supported.");
+            throw new IllegalArgumentException("only \"rus\", \"eng\" and \"num\" supported.");
         }
     }
 
@@ -29,11 +29,12 @@ public class Filter {
     }
 
     private boolean isCorrectChar(char c, boolean isSpaceIncluded) {
-        boolean result = false;
-        if (lang.equals("eng"))
-            result = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
-        else if (lang.equals("rus"))
-            result = (((c >= 'А' && c <= 'Я') || c == 'Ё') || ((c >= 'а' && c <= 'я') || c == 'ё'));
+        boolean result = switch (lang) {
+            case "eng" -> ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
+            case "rus" -> (((c >= 'А' && c <= 'Я') || c == 'Ё') || ((c >= 'а' && c <= 'я') || c == 'ё'));
+            case "num" -> (c >= '0' && c <= '9');
+            default -> false;
+        };
         if (isSpaceIncluded && !result)
             result = (c == ' ');
         return result;

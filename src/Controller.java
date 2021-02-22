@@ -32,7 +32,7 @@ public class Controller extends Application {
 
 
     private Encryptor encryptor;
-    private Filter filter;
+    private Filter msgFilter;
 
     private Window window;
 
@@ -67,12 +67,20 @@ public class Controller extends Application {
     @FXML
     void encrypt() {
         if (plainText.getText().length() > 0) {
-            if (setup()) {
-                cipherText.setText(encryptor.encrypt
-                        (filter.filterMsg(plainText.getText(), false),
-                                keyArea.getText()));
-                saveToFile(cipherText.getText(), getEncryptionMethod().toString() + "|"
-                        + keyArea.getText() + "|" + "Cipher.txt");
+            String key = null;
+            if ((key = setup()) != null) {
+                String filteredMsg = msgFilter.filterMsg(plainText.getText(), false);
+                if (filteredMsg.length() > 0) {
+                    cipherText.setText(encryptor.encrypt(filteredMsg, key));
+                    saveToFile(cipherText.getText(), getEncryptionMethod().toString() + "|"
+                            + key + "|" + "Cipher.txt");
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Incorrect input");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Your plain text does not contain any matching characters.");
+                    alert.showAndWait();
+                }
             }
         }
     }
@@ -80,47 +88,77 @@ public class Controller extends Application {
     @FXML
     void decrypt() {
         if (cipherText.getText().length() > 0) {
-            if (setup()) {
-                plainText.setText(encryptor.decrypt
-                        (filter.filterMsg(cipherText.getText(), false),
-                                keyArea.getText()));
-                saveToFile(plainText.getText(), getEncryptionMethod().toString() + "|"
-                        + keyArea.getText() + "|" + "Plain.txt");
+            String key = null;
+            if ((key = setup()) != null) {
+                String filteredMsg = msgFilter.filterMsg(cipherText.getText(), false);
+                if (filteredMsg.length() > 0) {
+                    plainText.setText(encryptor.decrypt(filteredMsg, key));
+                    saveToFile(plainText.getText(), getEncryptionMethod().toString() + "|"
+                            + key + "|" + "Plain.txt");
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Incorrect input");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Your cipher text does not contain any matching characters.");
+                    alert.showAndWait();
+                }
             }
         }
     }
 
-    private boolean setup() {
+    private String setup() {
         encryptor = null;
-        filter = null;
+        msgFilter = null;
+        Filter keyFilter = null;
         KeyChecker keyChecker = null;
-        boolean result = true;
         switch (getEncryptionMethod()) {
             case RailwayFence -> {
                 encryptor = new RailwayEncryptor();
-                filter = new Filter("eng");
+                msgFilter = new Filter("eng");
+                keyFilter = new Filter("num");
                 keyChecker = new KeyChecker("num");
             }
             case Vigener -> {
                 encryptor = new VigenerEncryptor("rus");
-                filter = new Filter("rus");
+                msgFilter = new Filter("rus");
+                keyFilter = msgFilter;
                 keyChecker = new KeyChecker("rus");
             }
             case Playfair -> {
                 encryptor = new PlayfairEncryptor();
-                filter = new Filter("eng");
+                msgFilter = new Filter("eng");
+                keyFilter = msgFilter;
                 keyChecker = new KeyChecker("eng");
             }
         }
-        if (!keyChecker.checkKey(keyArea.getText())) {
+        Errors error = null;
+        String key = keyFilter.filterMsg(keyArea.getText(), false);
+        if ((error = keyChecker.checkKey(key)) != null) {
+            key = null;
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Incorrect key");
             alert.setHeaderText(null);
-            alert.setContentText("The selected encryption method supports only " + keyChecker.getMode() + " keys.");
+            alert.setContentText(getErrorMsg(error));
             alert.showAndWait();
-            result = false;
         }
-        return result;
+        return key;
+    }
+
+    private String getErrorMsg(Errors warning) {
+        switch (warning) {
+            case ZERO_LEN -> {
+                return "The key does not contain any matching characters.";
+            }
+            case NUMBER_OVERFLOW -> {
+                return "Your key is too large.";
+            }
+            case ZERO -> {
+                return "The key must to be greater than 0.";
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 
     private void saveToFile(String text, String fileName) {
