@@ -36,13 +36,8 @@ public class KeyChecker {
 
     public void setMode(String mode) {
         switch (mode) {
-            case "num":
-            case "rus":
-            case "eng":
-                this.mode = mode;
-                break;
-            default:
-                throw new IllegalArgumentException("Only \"num\", \"rus\" and \"eng\" supported.");
+            case "num", "rus", "eng" -> this.mode = mode;
+            default -> throw new IllegalArgumentException("Only \"num\", \"rus\" and \"eng\" supported.");
         }
     }
 

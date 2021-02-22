@@ -55,7 +55,6 @@ public class RailwayEncryptor implements Encryptor {
     }
 
     private int getOffset(int lvl, boolean flag, int key) {
-
         if (flag && (lvl != 0) && (lvl != key - 1)) {
             return lvl * 2;
         }

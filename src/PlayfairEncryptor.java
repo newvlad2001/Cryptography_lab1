@@ -40,23 +40,25 @@ public class PlayfairEncryptor implements Encryptor {
 
     private StringBuilder prepareString(String msg) {
         StringBuilder resString = new StringBuilder(msg);
+        for (int j = 0; j < resString.length(); j++) {
+            if (resString.charAt(j) == 'J') {
+                resString.setCharAt(j, 'I');
+            } else if (resString.charAt(j) == 'j') {
+                resString.setCharAt(j, 'i');
+            }
+        }
         int i = 0;
         while (i < resString.length() - 1) {
-            if (resString.charAt(i) == 'J') {
-                resString.insert(i + 1, 'I');
-                resString.deleteCharAt(i);
-            } else if (resString.charAt(i) == 'j') {
-                resString.insert(i + 1, 'i');
-                resString.deleteCharAt(i);
-            }
+            //gXgjjertgg
             if (resString.charAt(i) == resString.charAt(i + 1)) {
                 resString.insert(i + 1, 'X');
-                i++;
+                //i++;
             }
-            i++;
+            i += 2;
         }
         if (resString.length() % 2 != 0)
             resString.append('X');
+        System.out.println(resString.toString());
         return resString;
     }
 

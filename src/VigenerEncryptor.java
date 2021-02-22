@@ -16,9 +16,7 @@ public class VigenerEncryptor implements Encryptor {
                 alphabet = Alphabet.engAlphabet;
                 alphabetLen = alphabet.length;
             }
-            default -> {
-                throw new IllegalArgumentException("Only \"eng\" and \"rus\" supported.");
-            }
+            default -> throw new IllegalArgumentException("Only \"eng\" and \"rus\" supported.");
         }
     }
 

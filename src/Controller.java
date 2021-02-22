@@ -1,22 +1,16 @@
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.fxml.FXML;
-import javafx.scene.layout.AnchorPane;
+import javafx.stage.Window;
 
 import java.io.*;
 
 public class Controller extends Application {
-
-    @FXML
-    private ToggleGroup encryptMethod;
 
     @FXML
     private RadioButton playfairCheck;
@@ -28,16 +22,7 @@ public class Controller extends Application {
     private RadioButton railwayCheck;
 
     @FXML
-    private ImageView image;
-
-    @FXML
     private TextField keyArea;
-
-    @FXML
-    private Button encryptButt;
-
-    @FXML
-    private Button decryptButt;
 
     @FXML
     private TextArea cipherText;
@@ -45,41 +30,70 @@ public class Controller extends Application {
     @FXML
     private TextArea plainText;
 
-    @FXML
-    private Menu fileButt;
-
 
     private Encryptor encryptor;
     private Filter filter;
-    private KeyChecker keyChecker;
+
+    private Window window;
+
+
+    @FXML
+    void openToEncrypt() {
+        loadFile(true);
+    }
+
+    @FXML
+    void openToDecrypt() {
+        loadFile(false);
+    }
+
+
+    @FXML
+    void saveCipherText() {
+        saveFile(false);
+    }
+
+    @FXML
+    void savePlainText() {
+        saveFile(true);
+    }
+
+    @FXML
+    void stopProgram() {
+        System.exit(0);
+    }
 
 
     @FXML
     void encrypt() {
-        if (setup()) {
-            cipherText.setText(encryptor.encrypt
-                    (filter.filterMsg(plainText.getText(), false),
-                            keyArea.getText()));
-            saveToFile(cipherText.getText(), getEncryptionMethod().toString() + "|"
-                    + keyArea.getText() + "|" + "Cipher.txt");
+        if (plainText.getText().length() > 0) {
+            if (setup()) {
+                cipherText.setText(encryptor.encrypt
+                        (filter.filterMsg(plainText.getText(), false),
+                                keyArea.getText()));
+                saveToFile(cipherText.getText(), getEncryptionMethod().toString() + "|"
+                        + keyArea.getText() + "|" + "Cipher.txt");
+            }
         }
     }
 
     @FXML
     void decrypt() {
-        if (setup()) {
-            plainText.setText(encryptor.decrypt
-                    (filter.filterMsg(cipherText.getText(), false),
-                            keyArea.getText()));
-            saveToFile(plainText.getText(), getEncryptionMethod().toString() + "|"
-                    + keyArea.getText() + "|" + "Plain.txt");
+        if (cipherText.getText().length() > 0) {
+            if (setup()) {
+                plainText.setText(encryptor.decrypt
+                        (filter.filterMsg(cipherText.getText(), false),
+                                keyArea.getText()));
+                saveToFile(plainText.getText(), getEncryptionMethod().toString() + "|"
+                        + keyArea.getText() + "|" + "Plain.txt");
+            }
         }
     }
 
     private boolean setup() {
         encryptor = null;
         filter = null;
-        keyChecker = null;
+        KeyChecker keyChecker = null;
         boolean result = true;
         switch (getEncryptionMethod()) {
             case RailwayFence -> {
@@ -91,7 +105,6 @@ public class Controller extends Application {
                 encryptor = new VigenerEncryptor("rus");
                 filter = new Filter("rus");
                 keyChecker = new KeyChecker("rus");
-
             }
             case Playfair -> {
                 encryptor = new PlayfairEncryptor();
@@ -111,25 +124,53 @@ public class Controller extends Application {
     }
 
     private void saveToFile(String text, String fileName) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write(text);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-    @FXML
-    void chooseFile() {
+    void saveFile(boolean savePlainText) {
         try {
-            clear();
-            getFile();
+            File file = chooseFile(true);
+            if (file != null) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                if (savePlainText)
+                    writer.write(plainText.getText());
+                else
+                    writer.write(cipherText.getText());
+                writer.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void clear() {
+    void loadFile(boolean toEncrypt) {
+        clearTextAreas();
+        try {
+            File file = chooseFile(false);
+            if (file != null) {
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                StringBuilder text = new StringBuilder();
+                String str;
+                while ((str = reader.readLine()) != null)
+                    text.append(str);
+                reader.close();
+                if (toEncrypt) {
+                    plainText.setText(text.toString());
+                }
+                else {
+                    cipherText.setText(text.toString());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void clearTextAreas() {
         cipherText.clear();
         plainText.clear();
     }
@@ -140,22 +181,23 @@ public class Controller extends Application {
         primaryStage.setTitle("Encryptor");
         primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root));
+        window = primaryStage.getOwner();
         primaryStage.show();
 
     }
 
-    public void getFile() throws IOException {
+    public File chooseFile(boolean toSave) throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File("/home/vladislav"));
-        File file = fileChooser.showOpenDialog(new Stage());
-        if (file != null) {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            StringBuilder text = new StringBuilder();
-            String str;
-            while ((str = reader.readLine()) != null)
-                text.append(str);
-            plainText.setText(text.toString());
-        }
+        fileChooser.setInitialFileName(".txt");
+        fileChooser.getExtensionFilters().add((new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt")));
+        File file;
+        if (toSave)
+            file = fileChooser.showSaveDialog(window);
+        else
+            file = fileChooser.showOpenDialog(window);
+
+        return file;
     }
 
     private EncryptionMethod getEncryptionMethod() {
