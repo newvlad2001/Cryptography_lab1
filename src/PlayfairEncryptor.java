@@ -36,6 +36,7 @@ public class PlayfairEncryptor implements Encryptor {
             toEncrypt.replace(i, i + 2, String.valueOf(toReplaceF) + toReplaceS);
         }
         return toEncrypt.toString();
+        //return toEncrypt.toString().toUpperCase();
     }
 
     private StringBuilder prepareString(String msg) {
@@ -49,10 +50,11 @@ public class PlayfairEncryptor implements Encryptor {
         }
         int i = 0;
         while (i < resString.length() - 1) {
-            //gXgjjertgg
-            if (resString.charAt(i) == resString.charAt(i + 1)) {
-                resString.insert(i + 1, 'X');
-                //i++;
+            if (Character.toUpperCase(resString.charAt(i)) == Character.toUpperCase(resString.charAt(i + 1))) {
+                if (Character.toUpperCase(resString.charAt(i)) == 'X')
+                    resString.insert(i + 1, 'Q');
+                else
+                    resString.insert(i + 1, 'X');
             }
             i += 2;
         }
@@ -93,6 +95,7 @@ public class PlayfairEncryptor implements Encryptor {
             toDecrypt.replace(i, i + 2, String.valueOf(toReplaceF) + toReplaceS);
         }
         return toDecrypt.toString();
+        //return toDecrypt.toString().toUpperCase();
     }
 
     private int[] getPosition(char c) {

@@ -11,16 +11,16 @@
    <children>
       <TextArea fx:id="plainText" layoutX="15.0" layoutY="62.0" prefHeight="200.0" prefWidth="470.0" wrapText="true" AnchorPane.bottomAnchor="129.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="515.0" AnchorPane.topAnchor="61.0">
          <font>
-            <Font size="17.0" />
+            <Font size="25.0" />
          </font></TextArea>
       <TextArea fx:id="cipherText" layoutX="515.0" layoutY="61.0" prefHeight="200.0" prefWidth="470.0" wrapText="true" AnchorPane.bottomAnchor="129.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="61.0">
          <font>
-            <Font size="17.0" />
+            <Font size="25.0" />
          </font>
       </TextArea>
       <VBox layoutX="15.0" layoutY="279.0" prefHeight="103.0" prefWidth="244.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="15.0">
          <children>
-            <RadioButton fx:id="railwayCheck" mnemonicParsing="false" selected="true" text="RailwayFence (eng)">
+            <RadioButton fx:id="railwayCheck" mnemonicParsing="false" onAction="#setupHint" selected="true" text="RailwayFence (eng)">
                <padding>
                   <Insets bottom="5.0" top="5.0" />
                </padding>
@@ -31,7 +31,7 @@
                   <Font size="18.0" />
                </font>
             </RadioButton>
-            <RadioButton fx:id="vigenerCheck" mnemonicParsing="false" text="Vigener (rus)" toggleGroup="$encryptMethod">
+            <RadioButton fx:id="vigenerCheck" mnemonicParsing="false" onAction="#setupHint" text="Vigener (rus)" toggleGroup="$encryptMethod">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
@@ -39,7 +39,7 @@
                   <Font size="18.0" />
                </font>
             </RadioButton>
-            <RadioButton fx:id="playfairCheck" mnemonicParsing="false" text="Playfair (eng)" toggleGroup="$encryptMethod">
+            <RadioButton fx:id="playfairCheck" mnemonicParsing="false" onAction="#setupHint" text="Playfair (eng)" toggleGroup="$encryptMethod">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
@@ -89,9 +89,9 @@
                </font></Button>
          </children>
       </VBox>
-      <TextField fx:id="keyArea" alignment="CENTER" layoutX="375.0" layoutY="306.0" prefHeight="40.0" prefWidth="250.0" AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="375.0" AnchorPane.rightAnchor="375.0">
+      <TextField fx:id="keyArea" alignment="CENTER" layoutX="375.0" layoutY="306.0" prefHeight="40.0" prefWidth="250.0" promptText="Input a number" AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="375.0" AnchorPane.rightAnchor="375.0">
          <font>
-            <Font size="17.0" />
+            <Font size="20.0" />
          </font>
       </TextField>
       <Text layoutX="480.0" layoutY="301.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Key:" AnchorPane.bottomAnchor="84.7548828125" AnchorPane.leftAnchor="480.0" AnchorPane.rightAnchor="480.0">

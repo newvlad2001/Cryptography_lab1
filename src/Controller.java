@@ -12,6 +12,7 @@ import java.io.*;
 
 public class Controller extends Application {
 
+
     @FXML
     private RadioButton playfairCheck;
 
@@ -35,6 +36,18 @@ public class Controller extends Application {
     private Filter msgFilter;
 
     private Window window;
+
+    @FXML
+    void setupHint() {
+        String hint = switch (getEncryptionMethod()) {
+            case RailwayFence -> "Input a number";
+            case Vigener -> "Введите слово";
+            case Playfair -> "Input a word";
+        };
+        //just a plug
+        if (hint.equals("Input a word")) keyArea.setText("Cryptography");
+        keyArea.setPromptText(hint);
+    }
 
 
     @FXML
@@ -66,6 +79,7 @@ public class Controller extends Application {
 
     @FXML
     void encrypt() {
+        cipherText.clear();
         if (plainText.getText().length() > 0) {
             String key = null;
             if ((key = setup()) != null) {
@@ -87,6 +101,7 @@ public class Controller extends Application {
 
     @FXML
     void decrypt() {
+        plainText.clear();
         if (cipherText.getText().length() > 0) {
             String key = null;
             if ((key = setup()) != null) {

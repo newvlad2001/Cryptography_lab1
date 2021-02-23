@@ -31,6 +31,7 @@ public class VigenerEncryptor implements Encryptor {
             cipherText.append(toAppend);
         }
         return cipherText.toString();
+        //return cipherText.toString().toUpperCase();
     }
 
     public String decrypt(String msg, String key) {
@@ -45,6 +46,7 @@ public class VigenerEncryptor implements Encryptor {
         }
 
         return plainText.toString();
+        //return plainText.toString().toUpperCase();
     }
 
     private String createProgressiveKey(String msg, String key) {

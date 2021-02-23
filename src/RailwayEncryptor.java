@@ -3,6 +3,7 @@ public class RailwayEncryptor implements Encryptor {
     public String encrypt(String toEncrypt, String keySrc) {
         StringBuilder cipherText = new StringBuilder();
         int key = Integer.parseInt(keySrc);
+        if (key == 1) return toEncrypt;
         for (int lvl = 0; lvl < key; lvl++) {
             int j = lvl;
             boolean flag = false;
@@ -13,10 +14,12 @@ public class RailwayEncryptor implements Encryptor {
             }
         }
         return cipherText.toString();
+        //return cipherText.toString().toUpperCase();
     }
 
     public String decrypt(String toDecrypt, String keySrc) {
         int key = Integer.parseInt(keySrc);
+        if (key == 1) return toDecrypt;
         StringBuilder plainText = new StringBuilder();
         StringBuilder[] arr = new StringBuilder[key];
         int index = 0;
@@ -52,6 +55,7 @@ public class RailwayEncryptor implements Encryptor {
             }
         }
         return plainText.toString();
+        //return plainText.toString().toUpperCase();
     }
 
     private int getOffset(int lvl, boolean flag, int key) {
